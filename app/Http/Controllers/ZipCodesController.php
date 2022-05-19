@@ -7,6 +7,7 @@ use App\Models\{ZipCode, Settlement};
 use DB;
 use Illuminate\Http\{JsonResponse, Request};
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\Cache;
 
 class ZipCodesController extends Controller
 {
@@ -19,8 +20,8 @@ class ZipCodesController extends Controller
 
   public function index($zip_code)
   {
-    return
-      $this->showOne(
+    return Cache::remember("zipcode_$zip_code", '15', function () use($zip_code) {
+      return $this->showOne(
         $this->model
              ->with(
                'settlements.settlementType',
@@ -30,6 +31,7 @@ class ZipCodesController extends Controller
              ->findByZipCode($zip_code)
              ->first()
       );
+    });
   }
 
 }
