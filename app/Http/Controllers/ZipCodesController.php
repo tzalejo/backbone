@@ -18,7 +18,7 @@ class ZipCodesController extends Controller
       $this->model = $model;
   }
 
-  public function index($zip_code)
+  public function show($zip_code)
   {
     return Cache::remember("zipcode_$zip_code", '15', function () use($zip_code) {
       return $this->showOne(

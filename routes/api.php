@@ -15,12 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-}); */
-
-Route::group(['prefix' => 'zip-codes'], function () {
-  Route::get('/{zip_code}', [ZipCodesController::class, 'index']);
-  Route::get('/otro/{zip_code}', [ZipCodesController::class, 'otroIndex']);
-});
+Route::resource('zip-codes', ZipCodesController::class)->only(['show']);
