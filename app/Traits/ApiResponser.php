@@ -14,6 +14,7 @@ trait ApiResponser
 
     protected function showOne(Model $instancia, $code=Response::HTTP_OK)
     {
+      /* isset($instancia)? return []: ''; */
       $response = [
             'zip_code'          => $instancia->zip_code,
             'locality'          => $instancia->settlements->first()->settlementType->name,

@@ -21,16 +21,18 @@ class ZipCodesController extends Controller
   public function show($zip_code)
   {
     return Cache::remember("zipcode_$zip_code", '15', function () use($zip_code) {
-      return $this->showOne(
-        $this->model
+      $allZipCode = $this->model
              ->with(
                'settlements.settlementType',
                'settlements.municipality',
                'settlements.municipality.federalEntity'
              )
              ->findByZipCode($zip_code)
-             ->first()
-      );
+             ->get();
+      if($allZipCode->first()){
+        return $this->showOne($allZipCode->first());
+      }
+      return [];
     });
   }
 
