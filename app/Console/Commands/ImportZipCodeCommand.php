@@ -60,54 +60,28 @@ class ImportZipCodeCommand extends Command
             foreach ($lineas as $i => $linea) {
                 $linea = rtrim(utf8_encode($linea), '\r\n');
                 $lineaConFormato = explode('|', $linea);
-                // zip code
-//                $zipCodes[$lineaConFormato[0]] = $lineaConFormato[0]; //d_codigo
-//
-//                $settTypes[(int)$lineaConFormato[9]] = $lineaConFormato[2]; // c_tipo_asenta = d_tipo_asenta
-//
-//                $settements[] = [
-//                    'key' => $lineaConFormato[11], // id_asenta_cpcons
-//                    'name' => $lineaConFormato[1], // d_asenta
-//                    'zone_type' => $lineaConFormato[12], //d_zona
-//                    'settlement_type_id' => (int)$lineaConFormato[9], // c_tipo_asenta
-//                    'municipality_id' => (int)$lineaConFormato[10], //c_mnpio
-//                    'zipcode' => $lineaConFormato[0] //d_codigo
-//                ];
-//
-//                $munis[(int)$lineaConFormato[10]] = [ // c_mnpio
-//                    'name' => $lineaConFormato[3], //D_mnpio
-//                    'federal_entity_id' => (int)$lineaConFormato[7] //c_estado
-//                ];
-//
-//                $federals[(int)$lineaConFormato[7]] = $lineaConFormato[4]; // c_estado = d_estado
 
                 $zipcode = trim($lineaConFormato[0]);
-//                $c_tipo_asenta = trim($lineaConFormato[10]);/**/
                 $d_tipo_asenta = trim($lineaConFormato[2]);
                 $id_asenta_cpcons = trim($lineaConFormato[12]);
                 $d_asenta = trim($lineaConFormato[1]);
                 $d_zona = trim($lineaConFormato[13]);
-//                $c_mnpio = trim($lineaConFormato[11]);/**/
                 $D_mnpio = trim($lineaConFormato[3]);
-//                $c_estado = trim($lineaConFormato[7]);/**/
                 $d_estado = trim($lineaConFormato[4]);
 
                 $zipCodes[$zipcode] = $zipcode; //d_codigo
-                $settTypes[$d_tipo_asenta] = $d_tipo_asenta; // c_tipo_asenta = d_tipo_asenta
+                $settTypes[$d_tipo_asenta] = $d_tipo_asenta; // d_tipo_asenta
                 $settements[] = [
                     'key' => $id_asenta_cpcons, // id_asenta_cpcons
                     'name' => $d_asenta, // d_asenta
                     'zone_type' => $d_zona, //d_zona
                     'settlement_type_id' => $d_tipo_asenta, // c_tipo_asenta
-//                    'municipality_id' => $c_mnpio, //c_mnpio
                     'zipcode' => $zipcode, //d_codigo
                     'municipality_id' => $D_mnpio
                 ];
 
                 $munis[$D_mnpio] = [ // c_mnpio
-//                    'id' => $c_mnpio,
                     'name' => $D_mnpio, //D_mnpio
-//                    'federal_entity_id' => $c_estado, //c_estado
                     'federal_entity_id' => $d_estado
                 ];
 
@@ -164,6 +138,5 @@ class ImportZipCodeCommand extends Command
                 'zip_code_id' => $zipCode->id
             ]);
         }
-
     }
 }
