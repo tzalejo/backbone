@@ -138,5 +138,6 @@ class ImportZipCodeCommand extends Command
                 'zip_code_id' => $zipCode->id
             ]);
         }
+        $this->info('finalizo.');
     }
 }
