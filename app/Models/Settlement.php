@@ -32,18 +32,30 @@ class Settlement extends Model
 
     public function zipCode()
     {
-      return $this->belongsTo(ZipCode::class);
+        return $this->belongsTo(ZipCode::class);
     }
 
 
     public function settlementType()
     {
-      return $this->belongsTo(SettlementType::class);
+        return $this->belongsTo(SettlementType::class);
     }
 
 
     public function municipality()
     {
-      return $this->belongsTo(Municipality::class);
+        return $this->belongsTo(Municipality::class);
     }
+
+    /**
+     * Get the post title.
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
 }

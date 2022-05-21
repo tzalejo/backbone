@@ -14,7 +14,7 @@ class CreateSettlementTypesTable extends Migration
     public function up()
     {
         Schema::create('settlement_types', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->string('name');
         });
     }

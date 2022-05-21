@@ -14,7 +14,7 @@ class CreateFederalEntitiesTable extends Migration
     public function up()
     {
         Schema::create('federal_entities', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->string('name');
             $table->string('code')->nullable();
 

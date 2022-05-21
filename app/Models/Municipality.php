@@ -17,7 +17,6 @@ class Municipality extends Model
      * @var array
      */
     protected $fillable = [
-        /* 'id', */
         'name',
         'federal_entity_id'
     ];
@@ -29,11 +28,23 @@ class Municipality extends Model
 
     public function settlements()
     {
-      return $this->hasMany(Settlement::class);
+        return $this->hasMany(Settlement::class);
     }
 
     public function federalEntity()
     {
-      return $this->belongsTo(FederalEntity::class);
+        return $this->belongsTo(FederalEntity::class);
     }
+
+    /**
+     * Get the post title.
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
 }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ZipCode extends Model
 {
     use HasFactory;
+
     protected $table = 'zip_codes';
     public $timestamps = false;
     /**
@@ -27,12 +28,16 @@ class ZipCode extends Model
 
     public function settlements()
     {
-      return $this->hasMany(Settlement::class);
+        return $this->hasMany(Settlement::class);
     }
 
     public function scopeFindByZipCode(Builder $query, string $zip_code): Builder
     {
-      return $query->where('zip_code', $zip_code);
+        return $query->where('zip_code', $zip_code);
     }
 
+    public function zip_code()
+    {
+        return $this->zip_code;
+    }
 }
