@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Settlement extends Model
 {
@@ -11,11 +12,7 @@ class Settlement extends Model
 
     protected $table = 'settlements';
     public $timestamps = false;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'key',
         'name',
@@ -30,30 +27,22 @@ class Settlement extends Model
     ];
 
 
-    public function zipCode()
+    public function zipCode(): BelongsTo
     {
         return $this->belongsTo(ZipCode::class);
     }
 
-
-    public function settlementType()
+    public function settlementType(): BelongsTo
     {
         return $this->belongsTo(SettlementType::class);
     }
 
-
-    public function municipality()
+    public function municipality(): BelongsTo
     {
         return $this->belongsTo(Municipality::class);
     }
 
-    /**
-     * Get the post title.
-     *
-     * @param string $value
-     * @return string
-     */
-    public function getNameAttribute($value)
+    public function getNameAttribute(string $value): string
     {
         return strtoupper($value);
     }

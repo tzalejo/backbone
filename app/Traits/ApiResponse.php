@@ -18,14 +18,13 @@ trait ApiResponse
 
     protected function showOne(Model $instancia, $code = Response::HTTP_OK): JsonResponse
     {
-        /* isset($instancia)? return []: ''; */
-        $municipality = $instancia->settlements->first()->municipality;
+        $municipality = $instancia->settlements->first()->municipality ?? '';
         $response = [
-            'zip_code' => $instancia->zip_code,
-            'locality' => $municipality->name,
-            'federal_entity' => $municipality->federalEntity,
-            'settlements' => $instancia->settlements,
-            'municipality' => $municipality,
+            'zip_code' => $instancia->zip_code ?? '',
+            'locality' => $municipality->name ?? '' ,
+            'federal_entity' => $municipality->federalEntity ?? '',
+            'settlements' => $instancia->settlements ?? '',
+            'municipality' => $municipality ?? '',
         ];
 
         return $this->successResponse($response, $code);

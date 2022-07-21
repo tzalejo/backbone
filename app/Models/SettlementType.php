@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SettlementType extends Model
 {
@@ -25,7 +26,7 @@ class SettlementType extends Model
     ];
 
 
-    public function settlements()
+    public function settlements(): HasMany
     {
       return $this->hasMany(Settlement::class);
     }

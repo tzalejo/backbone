@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Municipality extends Model
 {
@@ -11,11 +13,6 @@ class Municipality extends Model
 
     protected $table = 'municipalities';
     public $timestamps = false;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'federal_entity_id'
@@ -26,23 +23,17 @@ class Municipality extends Model
         'state_id'
     ];
 
-    public function settlements()
+    public function settlements(): HasMany
     {
         return $this->hasMany(Settlement::class);
     }
 
-    public function federalEntity()
+    public function federalEntity(): BelongsTo
     {
         return $this->belongsTo(FederalEntity::class);
     }
 
-    /**
-     * Get the post title.
-     *
-     * @param string $value
-     * @return string
-     */
-    public function getNameAttribute($value)
+    public function getNameAttribute(string $value): string
     {
         return strtoupper($value);
     }

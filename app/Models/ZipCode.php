@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ZipCode extends Model
 {
@@ -26,7 +27,7 @@ class ZipCode extends Model
     ];
 
 
-    public function settlements()
+    public function settlements(): HasMany
     {
         return $this->hasMany(Settlement::class);
     }

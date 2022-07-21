@@ -21,13 +21,7 @@ class FederalEntity extends Model
         'id'
     ];
 
-    /**
-     * Get the post title.
-     *
-     * @param string $value
-     * @return string
-     */
-    public function getNameAttribute($value)
+    public function getNameAttribute(string $value): string
     {
         return strtoupper($value);
     }
