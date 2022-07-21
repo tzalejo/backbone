@@ -12,16 +12,27 @@ class FederalEntity extends Model
     protected $table = 'federal_entities';
     public $timestamps = false;
     protected $fillable = [
+        'id',
         'name',
         'code'
     ];
-    protected $hidden = [
-        'id'
+    protected $maps = [
+        'id' => 'key'
     ];
+
+    protected $hidden = [
+        'id',
+    ];
+
+    protected $appends = ['key'];
 
     public function getNameAttribute(string $value): string
     {
         return strtoupper($value);
     }
 
+    public function getKeyAttribute()
+    {
+        return $this->attributes['id'];
+    }
 }
