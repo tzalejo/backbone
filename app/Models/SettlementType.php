@@ -12,15 +12,9 @@ class SettlementType extends Model
 
     protected $table = 'settlement_types';
     public $timestamps = false;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
     ];
-
     protected $hidden = [
         'id',
     ];

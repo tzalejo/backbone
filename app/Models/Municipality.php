@@ -17,7 +17,6 @@ class Municipality extends Model
         'name',
         'federal_entity_id'
     ];
-
     protected $hidden = [
         'id',
         'state_id'

@@ -13,36 +13,24 @@ use PHPExcel_IOFactory;
 
 class ImportZipCodeCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'import:zipcode';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Command description';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+    private array $unwanted_array;
+
     public function __construct()
     {
         parent::__construct();
+        $this->unwanted_array = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
+            'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
+            'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
+            'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
+
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): int
     {
 
         ini_set('memory_limit', '1024M');
@@ -62,12 +50,12 @@ class ImportZipCodeCommand extends Command
                 $lineaConFormato = explode('|', $linea);
 
                 $zipcode = trim($lineaConFormato[0]);
-                $d_tipo_asenta = trim($lineaConFormato[2]);
+                $d_tipo_asenta = strtr(trim($lineaConFormato[2]), $this->unwanted_array);
                 $id_asenta_cpcons = trim($lineaConFormato[12]);
-                $d_asenta = trim($lineaConFormato[1]);
-                $d_zona = trim($lineaConFormato[13]);
-                $D_mnpio = trim($lineaConFormato[3]);
-                $d_estado = trim($lineaConFormato[4]);
+                $d_asenta = strtr( trim($lineaConFormato[1]), $this->unwanted_array );
+                $d_zona = strtr( trim($lineaConFormato[13]), $this->unwanted_array );
+                $D_mnpio = strtr( trim($lineaConFormato[3]), $this->unwanted_array );
+                $d_estado = strtr( trim($lineaConFormato[4]), $this->unwanted_array );
 
                 $zipCodes[$zipcode] = $zipcode; //d_codigo
                 $settTypes[$d_tipo_asenta] = $d_tipo_asenta; // d_tipo_asenta
@@ -106,7 +94,7 @@ class ImportZipCodeCommand extends Command
         }
 
         // creo federal_entities
-         $this->info('Creando federals');
+        $this->info('Creando federals');
         foreach ($federals as $i => $fe) {
             FederalEntity::create([
                 'name' => $fe,
@@ -127,8 +115,8 @@ class ImportZipCodeCommand extends Command
         $this->info('Creando settements');
         foreach ($settements as $sett) {
             $zipCode = ZipCode::where('zip_code', $sett['zipcode'])->first();
-            $muni = Municipality::where('name',$sett['municipality_id'])->first();
-            $settType = SettlementType::where('name',$sett['settlement_type_id'])->first();
+            $muni = Municipality::where('name', $sett['municipality_id'])->first();
+            $settType = SettlementType::where('name', $sett['settlement_type_id'])->first();
             Settlement::create([
                 'key' => $sett['key'],
                 'name' => $sett['name'],

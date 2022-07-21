@@ -13,19 +13,12 @@ class ZipCode extends Model
 
     protected $table = 'zip_codes';
     public $timestamps = false;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'zip_code',
     ];
-
     protected $hidden = [
         'id',
     ];
-
 
     public function settlements(): HasMany
     {

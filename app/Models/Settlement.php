@@ -12,7 +12,6 @@ class Settlement extends Model
 
     protected $table = 'settlements';
     public $timestamps = false;
-
     protected $fillable = [
         'key',
         'name',
@@ -21,7 +20,6 @@ class Settlement extends Model
         'zip_code_id',
         'municipality_id'
     ];
-
     protected $hidden = [
         'id',
     ];

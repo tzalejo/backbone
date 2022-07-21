@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\{ZipCode};
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Cache;
