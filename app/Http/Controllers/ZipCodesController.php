@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\{ZipCode};
-use DB;
-use App\Traits\ApiResponser;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Cache;
 
 class ZipCodesController extends Controller
 {
-    use ApiResponser;
+    use ApiResponse;
 
     public function __construct(ZipCode $model)
     {
