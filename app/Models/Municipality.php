@@ -14,12 +14,14 @@ class Municipality extends Model
     protected $table = 'municipalities';
     public $timestamps = false;
     protected $fillable = [
+        'id',
         'name',
-        'federal_entity_id'
+        'state_id',
+        'federal_entity_id',
     ];
     protected $hidden = [
-        'id',
-        'state_id'
+        'federal_entity_id',
+        'federalEntity'
     ];
 
     public function settlements(): HasMany

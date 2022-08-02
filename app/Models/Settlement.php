@@ -16,14 +16,18 @@ class Settlement extends Model
         'key',
         'name',
         'zone_type',
-        'settlement_type_id',
         'zip_code_id',
-        'municipality_id'
+        'municipality_id',
+        'municipality',
+        'settlement_type_id'
     ];
     protected $hidden = [
         'id',
+        'settlement_type_id',
+        'zip_code_id',
+        'municipality_id',
+        'municipality',
     ];
-
 
     public function zipCode(): BelongsTo
     {
@@ -45,4 +49,8 @@ class Settlement extends Model
         return strtoupper($value);
     }
 
+    public function getZoneTypeAttribute(string $value): string
+    {
+        return strtoupper($value);
+    }
 }

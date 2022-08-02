@@ -8,7 +8,6 @@ use App\Models\Settlement;
 use App\Models\SettlementType;
 use App\Models\ZipCode;
 use Illuminate\Console\Command;
-use phpDocumentor\Reflection\Types\This;
 use PHPExcel_IOFactory;
 
 class ImportZipCodeCommand extends Command
@@ -30,7 +29,7 @@ class ImportZipCodeCommand extends Command
 
     }
 
-    public function handle(): int
+    public function handle(): void
     {
 
         ini_set('memory_limit', '1024M');
@@ -51,11 +50,12 @@ class ImportZipCodeCommand extends Command
 
                 $zipcode = trim($lineaConFormato[0]);
                 $d_tipo_asenta = strtr(trim($lineaConFormato[2]), $this->unwanted_array);
-                $id_asenta_cpcons = trim($lineaConFormato[12]);
-                $d_asenta = strtr( trim($lineaConFormato[1]), $this->unwanted_array );
-                $d_zona = strtr( trim($lineaConFormato[13]), $this->unwanted_array );
-                $D_mnpio = strtr( trim($lineaConFormato[3]), $this->unwanted_array );
-                $d_estado = strtr( trim($lineaConFormato[4]), $this->unwanted_array );
+                $id_asenta_cpcons = (int)trim($lineaConFormato[12]);
+                $d_asenta = strtr(trim($lineaConFormato[1]), $this->unwanted_array);
+                $d_zona = strtr(trim($lineaConFormato[13]), $this->unwanted_array);
+                $D_mnpio = strtr(trim($lineaConFormato[3]), $this->unwanted_array);
+                $c_mnpio = (int)strtr(trim($lineaConFormato[10]), $this->unwanted_array);
+                $d_estado = strtr(trim($lineaConFormato[4]), $this->unwanted_array);
 
                 $zipCodes[$zipcode] = $zipcode; //d_codigo
                 $settTypes[$d_tipo_asenta] = $d_tipo_asenta; // d_tipo_asenta
@@ -65,7 +65,7 @@ class ImportZipCodeCommand extends Command
                     'zone_type' => $d_zona, //d_zona
                     'settlement_type_id' => $d_tipo_asenta, // c_tipo_asenta
                     'zipcode' => $zipcode, //d_codigo
-                    'municipality_id' => $D_mnpio
+                    'municipality_id' => $D_mnpio // antes $c_mnpio
                 ];
 
                 $munis[$D_mnpio] = [ // c_mnpio
@@ -106,26 +106,33 @@ class ImportZipCodeCommand extends Command
         foreach ($munis as $i => $muni) {
             $fe = FederalEntity::where('name', $muni['federal_entity_id'])->first();
             Municipality::create([
+//                'id' => $muni['id'], //
                 'name' => $muni['name'],
                 'federal_entity_id' => $fe['id']
             ]);
         }
+        try {
+            // creo settlement
+            $this->info('Creando settements');
+            foreach ($settements as $sett) {
+                $zipCode = ZipCode::where('zip_code', $sett['zipcode'])->first();
+                $muni = Municipality::where('name', $sett['municipality_id'])->first();
+                $settType = SettlementType::where('name', $sett['settlement_type_id'])->first();
+                Settlement::create([
+                    'key' => $sett['key'],
+                    'name' => $sett['name'],
+                    'zone_type' => $sett['zone_type'],
+                    'settlement_type_id' => $settType->id,
+                    'municipality_id' => $muni->id,
+                    'zip_code_id' => $zipCode->id
+                ]);
+            }
 
-        // creo settlement
-        $this->info('Creando settements');
-        foreach ($settements as $sett) {
-            $zipCode = ZipCode::where('zip_code', $sett['zipcode'])->first();
-            $muni = Municipality::where('name', $sett['municipality_id'])->first();
-            $settType = SettlementType::where('name', $sett['settlement_type_id'])->first();
-            Settlement::create([
-                'key' => $sett['key'],
-                'name' => $sett['name'],
-                'zone_type' => $sett['zone_type'],
-                'settlement_type_id' => $settType->id,
-                'municipality_id' => $muni->id,
-                'zip_code_id' => $zipCode->id
-            ]);
+            $this->info('finalizo.');
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+            logger('Settlement');
+            logger($sett);
         }
-        $this->info('finalizo.');
     }
 }
